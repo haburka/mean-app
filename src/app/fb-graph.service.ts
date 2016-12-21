@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {FacebookService, FacebookLoginResponse, FacebookInitParams} from 'ng2-facebook-sdk';
 import {Feed} from "./feed";
 import {Http} from "@angular/http";
 import {BehaviorSubject} from "rxjs";
@@ -14,17 +13,9 @@ export class FbGraphService {
     private numPages: number = 0;
     public loggedIn$ = new BehaviorSubject<boolean>(false);
     constructor(
-        private fb: FacebookService,
         private http: Http) {
     }
 
-    fbInit() {
-        let fbParams: FacebookInitParams = {
-            appId: '234460410311790',
-            xfbml: true,
-            version: 'v2.8'
-        };
-    }
 
     fbLogin(){
         window['FB'].login((response) => {
@@ -32,37 +23,16 @@ export class FbGraphService {
             if (response.status === 'connected') {
                 this.token = response.accessToken;
                 this.loggedIn$.next(true);
-                // Logged into your app and Facebook.
             } else if (response.status === 'not_authorized') {
-                // The person is logged into Facebook, but not your app.
+                this.loggedIn$.next(false);
             } else {
-                // The person is not logged into Facebook, so we're not sure if
-                // they are logged into this app or not.
+                this.loggedIn$.next(false);
             }
         }, {scope: 'user_posts'});
     }
 
     fbCheckLogin(){
-        let attempts = 0;
-        return new Promise((resolve,reject)=>{
-            if(this.apiLoaded){
-                this.fbRawCheck(resolve)
-            } else {
-                let int = setInterval(()=>{
-                    if(!window['FB'] || !window['FB'].api){
-                        attempts++;
-                        if(attempts > 20) {
-                            reject();
-                        }
-                    } else{
-                        this.apiLoaded = true;
-                        //noinspection TypeScriptUnresolvedFunction
-                        clearInterval(int);
-                        this.fbRawCheck(resolve);
-                    }
-                },50);
-            }
-        });
+        return this.fbCheckApi((resolve) => this.fbRawCheck(resolve));
     }
 
     fbRawCheck(resolve: any){
@@ -82,18 +52,7 @@ export class FbGraphService {
         return new Promise((resolve,reject) => {
             var totalResp = new Feed();
             this.fbRun(path,action,fields).then((resp: Feed)=>{
-                if(resp['error']){
-                    console.log(resp['error']);
-                    this.error$.next(JSON.stringify(resp['error']));
-                    reject(totalResp);
-                } else {
-                    totalResp.data = resp.data;
-                    if(resp.paging && resp.paging.next && this.limit > this.numPages++) {
-                        this.getNextPage(resp, totalResp, reject, resolve);
-                    } else {
-                        resolve(totalResp);
-                    }
-                }
+                this.handleNextPage(resp,totalResp,resolve,reject);
             });
         });
     }
@@ -102,27 +61,31 @@ export class FbGraphService {
         this.http.get(prevResp.paging.next)
             .map(res => res.json())
             .subscribe((newResp) => {
-                if(newResp['error']){
-                    console.log(newResp['error']);
-                    this.error$.next(JSON.stringify(newResp['error']));
-                    reject(totalResp);
-                } else {
-                    totalResp.data = totalResp.data.concat(newResp.data);
-                    console.log(totalResp,newResp);
-                    if(newResp.paging && newResp.paging.next && this.limit > this.numPages++){
-                        this.getNextPage(newResp,totalResp,reject,resolve);
-                    } else {
-                        resolve(totalResp);
-                    }
-                }
+                this.handleNextPage(newResp,totalResp,resolve,reject);
             });
     }
 
-    fbRun(path,action,fields){
+    private handleNextPage(resp,totalResp,resolve,reject){
+        if(resp['error']){
+            console.log(resp['error']);
+            this.error$.next(JSON.stringify(resp['error']));
+            reject(totalResp);
+        } else {
+            totalResp.data = totalResp.data.concat(resp.data);
+            console.log(totalResp,resp);
+            if(resp.paging && resp.paging.next && this.limit > this.numPages++){
+                this.getNextPage(resp,totalResp,reject,resolve);
+            } else {
+                resolve(totalResp);
+            }
+        }
+    }
+
+    private fbCheckApi(func: any){
         let attempts = 0;
         return new Promise((resolve,reject)=>{
             if(this.apiLoaded){
-                this.fbRaw(path,action,fields,resolve);
+                func(resolve);
             } else {
                 let int = setInterval(()=>{
                     if(!window['FB'] || !window['FB'].api){
@@ -134,11 +97,15 @@ export class FbGraphService {
                         this.apiLoaded = true;
                         //noinspection TypeScriptUnresolvedFunction
                         clearInterval(int);
-                        this.fbRaw(path,action,fields,resolve);
+                        func(resolve);
                     }
                 },50);
             }
         });
+    }
+
+    fbRun(path,action,fields){
+        return this.fbCheckApi((resolve) => this.fbRaw(path,action,fields,resolve));
     }
 
     private fbRaw(path,action,fields,resolve){
