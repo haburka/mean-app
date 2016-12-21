@@ -9,6 +9,7 @@ import {RouterModule} from "@angular/router";
 import {PostsService} from "./posts.service";
 import {FbGraphService} from "./fb-graph.service";
 import {FacebookService} from "ng2-facebook-sdk";
+import { FbPlayComponent } from './fb-play/fb-play.component';
 
 const ROUTES = [
   {
@@ -19,6 +20,10 @@ const ROUTES = [
   {
     path: 'posts',
     component: PostsComponent
+  },
+  {
+    path: 'fb',
+    component: FbPlayComponent
   }
 ];
 
@@ -26,7 +31,8 @@ const ROUTES = [
 @NgModule({
   declarations: [
     AppComponent,
-    PostsComponent
+    PostsComponent,
+    FbPlayComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,30 @@
+{{response}}
+<div *ngIf="!isLoggedIn">
+    <button (click)="fbLogin()">Click here to login</button>
+</div>
+<!--<form >-->
+    <!--<input type="text" [(ngModel)]="path" name="path">-->
+    <!--<input type="text" [(ngModel)]="fields" name="fields">-->
+    <!--<button type="submit" (click)="getFB()">Search</button>-->
+<!--</form>-->
+<!--<button type="button" (click)="getPicsOfFriends()">get friends pics</button>-->
+<!--<div *ngFor="let pic of pics">-->
+    <!--<img [src]="pic.url" height="pic.height" width="pic.width">-->
+<!--</div>-->
+<!--<button type="button" (click)="getFeedItems()">get feed items</button>-->
+<!--<div *ngFor="let post of posts">-->
+    <!--<img *ngIf="post.url" [src]="post.url">-->
+    <!--<p *ngIf="post.message">{{post.message}} was your shitty status</p>-->
+    <!--<p *ngIf="post.whoLikes">{{post.whoLikes.length}} of your friends like your trash</p>-->
+<!--</div>-->
+<div *ngIf="isLoggedIn && !loading">
+    <button type="button" (click)="getFeedLikes()">Get your feed likes</button>
+    <p *ngIf="totalLikes">Total Likes: {{totalLikes}}</p>
+    <div *ngFor="let who of whoLikes; let idx=index;">
+        <p>{{idx + 1}}. {{who.name}}:{{who.num}}</p>
+    </div>
+</div>
+<div *ngIf="loading">
+    It takes about 10 seconds... fetching that data.... If it takes longer, app is probably broken
+</div>
+<p *ngIf="error">We got an error, Please tell rob this: {{error}}</p>
