@@ -1,10 +1,15 @@
 # MeanApp
 Hi LFCT folk, here's an app that I made.
+
 Make sure you have at least node version 4 and npm version 3 before installing
+
 You can install it with `npm install` and run it with `npm start`
+
 I used this tutorial to make it [making a mean app](https://scotch.io/tutorials/mean-app-with-angular-2-and-the-angular-cli)
+
 You'll also want to install the angular-cli globally, so run `sudo npm install -g angular-cli`
-The FB-api might not work for you... in which case send me a message and we'll figure it out. 
+
+The FB-api might not work for you... in which case send me a message and we'll figure it out.
 
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.22-1.
 
