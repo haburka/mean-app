@@ -71,6 +71,9 @@ export class FbPlayComponent implements OnInit {
                     console.log(val);
                     this.classifications = val;
                     this.loadingClassifications = false;
+                },
+                (err) => {
+                    this.error = err;
                 }
             );
         this.loadingClassifications = false;
