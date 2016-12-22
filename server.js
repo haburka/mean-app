@@ -2,6 +2,7 @@
  * Created by rob on 12/20/16.
  */
 // Get dependencies
+"use strict";
 const express = require('express');
 const path = require('path');
 const http = require('http');

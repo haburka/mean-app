@@ -32,7 +32,7 @@ router.post('/classify', upload.array(), (req, userRes) => {
     username = req.body.username;
     classifier = req.body.classifier;
     texts = req.body.texts.filter((val) => typeof val !== "undefined");
-    console.log(texts);
+    console.log(req.body,req.ip);
 
     request.post(
         'https://api.uclassify.com' + '/v1/' + username + '/' + classifier + '/classify',
