@@ -8,6 +8,8 @@ import {FeedItem} from "../feed-item";
 import {FeedLikes} from "../feed-likes";
 import {Likes} from "../likes";
 import {UClassifyAPIService} from "../u-classify-api.service";
+import {FeedMessages} from "../feed-messages";
+import {UcReply} from "../uc-reply";
 
 @Component({
     selector: 'app-fb-play',
@@ -27,6 +29,9 @@ export class FbPlayComponent implements OnInit {
     public isLoggedIn: boolean;
     public error: string;
     public loading = false;
+    public loadingClassifications = false;
+    public messages: Array<string>;
+    public classifications: Array<UcReply>;
     constructor(
       private fb: FbGraphService,
       private uClassify: UClassifyAPIService) {
@@ -35,16 +40,40 @@ export class FbPlayComponent implements OnInit {
     ngOnInit() {
         this.fb.loggedIn$.subscribe((val)=>this.isLoggedIn = val);
         this.fb.error$.subscribe((val)=>this.error = val);
-        this.fb.fbCheckLogin();
-        this.uClassify.test();
+        this.fbCheckLogin();
     }
+
 
     fbLogin(){
         this.fb.fbLogin();
     }
 
     fbCheckLogin(){
-        this.fb.fbCheckLogin();
+        this.fb.fbCheckLogin().then((res: any) => this.isLoggedIn = res);
+    }
+
+    getClassifications(){
+        this.loadingClassifications = true;
+        if(!this.messages) {
+            this.fb.fbGetAllPages("/me/posts", "GET", "message",1).then((resp: FeedMessages)=> {
+                this.parseFeedMessages(resp);
+            });
+        }
+    }
+
+    parseFeedMessages(feed: FeedMessages){
+        this.messages = feed.data
+            .map((val: {message:string})=> val.message)
+            .filter((val) => typeof val !== "undefined");
+        this.uClassify.ucPost("Sentiment", "uClassify", this.messages)
+            .subscribe(
+                (val: Array<UcReply>) => {
+                    console.log(val);
+                    this.classifications = val;
+                    this.loadingClassifications = false;
+                }
+            );
+        this.loadingClassifications = false;
     }
 
     parseResponse(val){

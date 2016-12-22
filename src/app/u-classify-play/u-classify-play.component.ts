@@ -9,14 +9,14 @@ import {UcReply} from "../uc-reply";
 })
 export class UClassifyPlayComponent implements OnInit {
 
-  res: UcReply = new UcReply();
+  res: Array<UcReply> = [];
 
   constructor(
     private uClassify: UClassifyAPIService
   ) { }
 
   ngOnInit() {
-    this.res.data = this.uClassify.exampleReply();
+    this.res = this.uClassify.exampleReply();
   }
 
 }

@@ -1,12 +1,7 @@
 export class UcReply {
-  data: Array<{
-    textCoverage: number,
+    textCoverage: number;
     classification: Array<{
-      className: string,
-      p: number;
-    }>
-  }>;
-  constructor(){
-    this.data = [];
-  }
+        className: string,
+        p: number;
+    }>;
 }

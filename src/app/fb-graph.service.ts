@@ -40,9 +40,10 @@ export class FbGraphService {
             if(response.status === "connected"){
                 this.loggedIn$.next(true);
                 this.token = response.authResponse.accessToken;
+                resolve(true);
+            } else {
+                resolve(false);
             }
-            console.log(response);
-            resolve(response);
         });
     }
 
