@@ -28,7 +28,7 @@ export class FbGraphService {
             } else {
                 this.loggedIn$.next(false);
             }
-        }, {scope: "'user_posts','user_likes','user_photos','user_status','user_friends'"});
+        }, {scope: "'user_posts'"});
     }
 
     fbCheckLogin(){
