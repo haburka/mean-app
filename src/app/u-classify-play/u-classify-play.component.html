@@ -1,0 +1,3 @@
+<div *ngFor="let text of res.data">
+  {{text.textCoverage}}:<span *ngFor="let result of text.classification">{{result.className}}:{{result.p}}</span>
+</div>

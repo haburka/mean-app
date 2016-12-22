@@ -7,6 +7,7 @@ import {Post} from "../post";
 import {FeedItem} from "../feed-item";
 import {FeedLikes} from "../feed-likes";
 import {Likes} from "../likes";
+import {UClassifyAPIService} from "../u-classify-api.service";
 
 @Component({
     selector: 'app-fb-play',
@@ -26,13 +27,16 @@ export class FbPlayComponent implements OnInit {
     public isLoggedIn: boolean;
     public error: string;
     public loading = false;
-    constructor(private fb: FbGraphService) {
+    constructor(
+      private fb: FbGraphService,
+      private uClassify: UClassifyAPIService) {
     }
 
     ngOnInit() {
         this.fb.loggedIn$.subscribe((val)=>this.isLoggedIn = val);
         this.fb.error$.subscribe((val)=>this.error = val);
         this.fb.fbCheckLogin();
+        this.uClassify.test();
     }
 
     fbLogin(){

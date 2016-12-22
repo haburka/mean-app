@@ -8,13 +8,10 @@ import {RouterModule} from "@angular/router";
 import {PostsService} from "./posts.service";
 import {FbGraphService} from "./fb-graph.service";
 import {FbPlayComponent} from "./fb-play/fb-play.component";
+import {UClassifyAPIService} from "./u-classify-api.service";
+import { UClassifyPlayComponent } from './u-classify-play/u-classify-play.component';
 
 const ROUTES = [
-    {
-        path: '',
-        redirectTo: 'FbPlayComponent',
-        pathMatch: 'full'
-    },
     {
         path: 'posts',
         component: PostsComponent
@@ -22,6 +19,10 @@ const ROUTES = [
     {
         path: 'fb',
         component: FbPlayComponent
+    },
+    {
+        path: 'uClassify',
+        component: UClassifyPlayComponent
     }
 ];
 
@@ -30,7 +31,8 @@ const ROUTES = [
     declarations: [
         AppComponent,
         PostsComponent,
-        FbPlayComponent
+        FbPlayComponent,
+        UClassifyPlayComponent
     ],
     imports: [
         BrowserModule,
@@ -38,7 +40,11 @@ const ROUTES = [
         HttpModule,
         RouterModule.forRoot(ROUTES) // Add routes to the app
     ],
-    providers: [PostsService, FbGraphService],
+    providers: [
+      PostsService,
+      FbGraphService,
+      UClassifyAPIService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
