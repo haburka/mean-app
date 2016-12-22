@@ -1,40 +1,42 @@
-{{response}}
 <div *ngIf="!isLoggedIn">
-    <button (click)="fbLogin()">Click here to login</button>
+    <button md-button (click)="fbLogin()">Click here to login</button>
 </div>
-<!--<form >-->
-<!--<input type="text" [(ngModel)]="path" name="path">-->
-<!--<input type="text" [(ngModel)]="fields" name="fields">-->
-<!--<button type="submit" (click)="getFB()">Search</button>-->
-<!--</form>-->
-<!--<button type="button" (click)="getPicsOfFriends()">get friends pics</button>-->
-<!--<div *ngFor="let pic of pics">-->
-<!--<img [src]="pic.url" height="pic.height" width="pic.width">-->
-<!--</div>-->
-<!--<button type="button" (click)="getFeedItems()">get feed items</button>-->
-<!--<div *ngFor="let post of posts">-->
-<!--<img *ngIf="post.url" [src]="post.url">-->
-<!--<p *ngIf="post.message">{{post.message}} was your shitty status</p>-->
-<!--<p *ngIf="post.whoLikes">{{post.whoLikes.length}} of your friends like your trash</p>-->
-<!--</div>-->
 <div *ngIf="isLoggedIn && !loading">
-    <button type="button" (click)="getFeedLikes()">Get your feed likes</button>
+    <button md-button type="button" (click)="getFeedLikes()">Get your feed likes</button>
     <p *ngIf="totalLikes">Total Likes: {{totalLikes}}</p>
     <div *ngFor="let who of whoLikes; let idx=index;">
         <p>{{idx + 1}}. {{who.name}}:{{who.num}}</p>
     </div>
 </div>
 <div *ngIf="isLoggedIn && !loadingClassifications">
-    <button type="button" (click)="getClassifications()">Analyze the sentiment of your posts!</button>
-    <table *ngIf="messages && classifications" style="width:100%;">
-        <tr *ngFor="let message of messages; let idx=index;">
-            <th>{{message}}</th>
-            <th>
-                <span *ngFor="let res of classifications[idx].classification">
-                    Keyword {{res.keyword}} is {{res.p}}% {{res.className}}
-                </span>
-            </th>
-        </tr>
+    <label>Select your style of classification</label>
+    <md-radio-group name="pick">
+        <md-radio-button value="classify" [(ngModel)]="action">Overall Sentiment</md-radio-button>
+        <md-radio-button value="keyword" [(ngModel)]="action">Keywords</md-radio-button>
+    </md-radio-group>
+    <button md-button type="button" (click)="getClassifications()">Analyze the sentiment of your posts!</button>
+    <md-grid-list cols="3">
+        <md-grid-tile>Facebook Post</md-grid-tile>
+        <md-grid-tile>Positive Sentiment</md-grid-tile>
+        <md-grid-tile>Negative Sentiment</md-grid-tile>
+        <md-grid-tile *ngFor="let message of messages; let idx=index;">
+            {{message}}
+            <md-grid-tile *ngFor="let res of classifications[idx].classification">
+                {{res.p}}% {{res.className}}
+            </md-grid-tile>
+        </md-grid-tile>
+    </md-grid-list>
+    <table class="table" *ngIf="messages && classifications && action === 'classify'" style="width:100%;">
+        <thead>
+            <tr>
+                <th>Facebook Post</th>
+                <th>Positive Sentiment</th>
+                <th>Negative Sentiment</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
     </table>
 </div>
 <div *ngIf="loading">

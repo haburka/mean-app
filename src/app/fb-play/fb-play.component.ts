@@ -32,6 +32,7 @@ export class FbPlayComponent implements OnInit {
     public loadingClassifications = false;
     public messages: Array<string>;
     public classifications: Array<UcReply>;
+    public action: string;
     constructor(
       private fb: FbGraphService,
       private uClassify: UClassifyAPIService) {
@@ -65,7 +66,7 @@ export class FbPlayComponent implements OnInit {
         this.messages = feed.data
             .map((val: {message:string})=> val.message)
             .filter((val) => typeof val !== "undefined");
-        this.uClassify.ucPost("Sentiment", "uClassify", this.messages)
+        this.uClassify.ucPost("Sentiment", "uClassify", this.messages,this.action)
             .subscribe(
                 (val: Array<UcReply>) => {
                     console.log(val);

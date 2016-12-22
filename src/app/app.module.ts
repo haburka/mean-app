@@ -9,8 +9,9 @@ import {PostsService} from "./posts.service";
 import {FbGraphService} from "./fb-graph.service";
 import {FbPlayComponent} from "./fb-play/fb-play.component";
 import {UClassifyAPIService} from "./u-classify-api.service";
-import { UClassifyPlayComponent } from './u-classify-play/u-classify-play.component';
-import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import {UClassifyPlayComponent} from "./u-classify-play/u-classify-play.component";
+import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
+import {MaterialModule} from "@angular/material";
 
 const ROUTES = [
     {
@@ -38,20 +39,21 @@ const ROUTES = [
         PostsComponent,
         FbPlayComponent,
         UClassifyPlayComponent,
-        PrivacyPolicyComponent
+        PrivacyPolicyComponent,
     ],
     imports: [
         BrowserModule,
         FormsModule,
         HttpModule,
-        RouterModule.forRoot(ROUTES) // Add routes to the app
+        RouterModule.forRoot(ROUTES), // Add routes to the app
+        MaterialModule.forRoot()
     ],
     providers: [
       PostsService,
       FbGraphService,
       UClassifyAPIService
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
 })
 export class AppModule {
 }
