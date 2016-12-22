@@ -10,8 +10,13 @@ import {FbGraphService} from "./fb-graph.service";
 import {FbPlayComponent} from "./fb-play/fb-play.component";
 import {UClassifyAPIService} from "./u-classify-api.service";
 import { UClassifyPlayComponent } from './u-classify-play/u-classify-play.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 
 const ROUTES = [
+    {
+        path: 'privacy',
+        component: PrivacyPolicyComponent
+    },
     {
         path: 'posts',
         component: PostsComponent
@@ -32,7 +37,8 @@ const ROUTES = [
         AppComponent,
         PostsComponent,
         FbPlayComponent,
-        UClassifyPlayComponent
+        UClassifyPlayComponent,
+        PrivacyPolicyComponent
     ],
     imports: [
         BrowserModule,
