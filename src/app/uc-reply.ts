@@ -2,6 +2,7 @@ export class UcReply {
     textCoverage: number;
     classification: Array<{
         className: string,
-        p: number;
+        p: number,
+        keyword: string,
     }>;
 }

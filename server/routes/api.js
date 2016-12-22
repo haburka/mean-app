@@ -35,7 +35,7 @@ router.post('/classify', upload.array(), (req, userRes) => {
     console.log(req.body,req.ip);
 
     request.post(
-        'https://api.uclassify.com' + '/v1/' + username + '/' + classifier + '/classify',
+        'https://api.uclassify.com' + '/v1/' + username + '/' + classifier + '/keywords',
         {
             json: {texts: texts},
             headers: {Authorization: "Token LkVogjbE2b4h"},

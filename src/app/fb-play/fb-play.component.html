@@ -25,13 +25,13 @@
     </div>
 </div>
 <div *ngIf="isLoggedIn && !loadingClassifications">
-    <button type="button" (click)="getClassifications()">Give yourself some standards</button>
+    <button type="button" (click)="getClassifications()">Analyze the sentiment of your posts!</button>
     <table *ngIf="messages && classifications" style="width:100%;">
         <tr *ngFor="let message of messages; let idx=index;">
             <th>{{message}}</th>
             <th>
                 <span *ngFor="let res of classifications[idx].classification">
-                    is {{res.p}}% {{res.className}}
+                    Keyword {{res.keyword}} is {{res.p}}% {{res.className}}
                 </span>
             </th>
         </tr>
