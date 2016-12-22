@@ -27,10 +27,17 @@ export class UClassifyAPIService {
     exampleReply() {
         return [{
             "textCoverage": 1,
-            "classification": [{"className": "negative", "p": 0.52003}, {"className": "positive", "p": 0.47997}]
+            "classification": [
+                {"className": "negative", "p": 0.52003, "keyword": "idk"},
+                {"className": "positive", "p": 0.47997, "keyword": "idk"}
+            ],
         }, {
             "textCoverage": 1,
-            "classification": [{"className": "negative", "p": 0.709271}, {"className": "positive", "p": 0.290729}]
+            "classification": [
+                {"className": "negative", "p": 0.709271, "keyword": "idk"},
+                {"className": "positive", "p": 0.290729, "keyword": "idk"}
+            ],
+            "keyword": "idk"
         }];
     }
 }
