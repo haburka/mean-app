@@ -3,7 +3,7 @@ Hi LFCT folk, here's an app that I made.
 
 Make sure you have at least node version 4 and npm version 3 before installing
 
-You can install it with `npm install` and run it with `npm start`
+You can install it with `npm install` and run it with `npm start` then the server should be running on `http://localhost:3000`
 
 I used this tutorial to make it [making a mean app](https://scotch.io/tutorials/mean-app-with-angular-2-and-the-angular-cli)
 
@@ -15,6 +15,8 @@ This project was generated with [angular-cli](https://github.com/angular/angular
 
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+This server is purely the frontend of the app, which is useful for debugging. 
 
 ## Code scaffolding
 
