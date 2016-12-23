@@ -40,6 +40,7 @@ export class FbPlayComponent implements OnInit {
     public pink: Array<string>;
     public blueGrey: Array<string>;
     public customText: string;
+    public hasClicked = false;
     constructor(
       private fb: FbGraphService,
       private uClassify: UClassifyAPIService,
@@ -66,6 +67,7 @@ export class FbPlayComponent implements OnInit {
     }
 
     getClassifications(){
+        this.hasClicked = true;
         this.loadingClassifications = true;
         let func;
         if(this.action === "keyword"){

@@ -44,11 +44,11 @@ export class ThemeService {
         if(!hue){
             return this[palette]['500'];
         }
-        if(hue < 50 || hue >= 1000){
+        if(hue >= 1000){
             console.log("invalid hue "+hue);
             return this[palette]['500'];
         }
-        if(hue >= 50 && hue < 100){
+        if(hue < 100){
             return this[palette]['50'];
         }
         return this[palette][Math.floor(hue / 100) * 100];
