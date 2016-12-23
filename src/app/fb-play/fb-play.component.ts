@@ -54,7 +54,7 @@ export class FbPlayComponent implements OnInit {
         this.titleService.title.next("Analyze your Facebook Posts");
         this.pink = (<any>Object).values(this.theme.pink);
         this.blueGrey = (<any>Object).values(this.theme.blueGrey);
-    }
+s    }
 
 
     fbLogin(){
@@ -73,10 +73,15 @@ export class FbPlayComponent implements OnInit {
         } else if (this.action === "classify"){
             func = (val) => this.parseClassifications(val);
         }
+        // this.messages = this.uClassify.exampleMessages();
+        // this.parseKeywords(this.uClassify.exampleKeyword());
+        // return;
         if(!this.messages) {
             this.fb.fbGetAllPages("/me/posts", "GET", "message",1).then((resp: FeedMessages)=> {
                 this.parseFeedMessages(resp,func);
             });
+        } else {
+            func(this.messages);
         }
     }
 
@@ -100,16 +105,16 @@ export class FbPlayComponent implements OnInit {
         this.messages.forEach((message: string, index: number) => {
             let keywords = val[index];
             if(keywords.length === 0){
-                this.displayTiles.push({ color: "white", text: message, colspan: 1, rowspan: 2});
-                this.displayTiles.push({ color: "white", text: "No keywords were found for this message", colspan: 2, rowspan: 2});
+                this.displayTiles.push({ color: "white", text: message, colspan: 2, rowspan: 2});
+                this.displayTiles.push({ color: "white", text: "No keywords were found for this message", colspan: 1, rowspan: 2});
             } else if (keywords.length === 1){
                 let keyword = keywords[0];
-                this.displayTiles.push({ color: "white", text: message, colspan: 1, rowspan: 2});
-                this.displayTiles.push({ color: this.getSentimentColor(keyword), text: this.getKeyWordText(keyword), colspan: 2, rowspan: 2, textColor:'white'});
+                this.displayTiles.push({ color: "white", text: message, colspan: 2, rowspan: 2});
+                this.displayTiles.push({ color: this.getSentimentColor(keyword), text: this.getKeyWordText(keyword), colspan: 1, rowspan: 2, textColor:'white'});
             } else {
-                this.displayTiles.push({ color: "white", text: message, colspan: 1, rowspan: keywords.length });
-                keywords.slice(0,5).forEach((keyword: UcKeyword) => {
-                    this.displayTiles.push({ color: this.getSentimentColor(keyword), text: this.getKeyWordText(keyword), colspan: 2, rowspan: 1, textColor:'white'});
+                this.displayTiles.push({ color: "white", text: message, colspan: 2, rowspan: keywords.length });
+                keywords.forEach((keyword: UcKeyword) => {
+                    this.displayTiles.push({ color: this.getSentimentColor(keyword), text: this.getKeyWordText(keyword), colspan: 1, rowspan: 1, textColor:'white'});
                 });
             }
         });

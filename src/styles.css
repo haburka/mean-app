@@ -4,3 +4,8 @@
 body{
     background-color: #c2185b;
 }
+
+figure > p {
+    text-overflow: ellipsis;
+    height: 100%;
+}
