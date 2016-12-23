@@ -70,7 +70,7 @@ export class FbPlayComponent implements OnInit {
         this.hasClicked = true;
         this.loadingClassifications = true;
         let func;
-        if(this.action === "keyword"){
+        if(this.action === "keywords"){
             func = (val) => this.parseKeywords(val);
         } else if (this.action === "classify"){
             func = (val) => this.parseClassifications(val);
