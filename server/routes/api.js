@@ -26,16 +26,17 @@ router.get('/posts', (req, res) => {
     })
 });
 router.post('/classify', upload.array(), (req, userRes) => {
-    let username, classifier, texts;
+    let username, classifier, texts, action;
 
     // parse the received body data
     username = req.body.username;
     classifier = req.body.classifier;
     texts = req.body.texts.filter((val) => typeof val !== "undefined");
+    action = req.body.action;
     console.log(req.body,req.ip);
 
     request.post(
-        'https://api.uclassify.com' + '/v1/' + username + '/' + classifier + '/keywords',
+        'https://api.uclassify.com' + '/v1/' + username + '/' + classifier + '/' + action,
         {
             json: {texts: texts},
             headers: {Authorization: "Token LkVogjbE2b4h"},
