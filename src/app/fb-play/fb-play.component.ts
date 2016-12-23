@@ -86,17 +86,19 @@ export class FbPlayComponent implements OnInit {
                 this.parseFeedMessages(resp,func);
             });
         } else {
-            func(this.messages);
+            this.parseFeedMessages(null,func);
         }
     }
 
     parseFeedMessages(feed: FeedMessages, func: any){
-        this.messages = feed.data
-            .map((val: {message:string})=> val.message)
-            .filter((val) => typeof val !== "undefined");
+        if(!this.messages){
+            this.messages = feed.data
+                .map((val: {message:string})=> val.message)
+                .filter((val) => typeof val !== "undefined");
+        }
         this.uClassify.ucPost("Sentiment", "uClassify", this.messages,this.action)
             .subscribe(
-                (val: Array<UcReply>) => func(val),
+                (val: any) => func(val),
                 (err) => {
                     this.error = err;
                 }
