@@ -12,27 +12,9 @@
 *{
   color: #212121;
 }
-.accent{
-  color: md-color($accent,800);
+md-grid-tile{
+  border: 1px solid #BDBDBD;
 }
-.negative{
-  background-color: md-color($accent);
-}
-.negative-low{
-  background-color: md-color($accent,200);
-}
-.negative-high{
-  background-color: md-color($accent,600);
-}
-.positive{
-  background-color: md-color($primary);
-}
-.positive-low{
-  background-color: md-color($primary,200);
-}
-.positive-high{
-  background-color: md-color($primary,600);
-}
-.white{
-  background-color: white;
+md-grid-list{
+  width: 96%;
 }

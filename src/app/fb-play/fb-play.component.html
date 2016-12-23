@@ -12,7 +12,7 @@
         </md-radio-group>
         <p><span class="accent">Overall Sentiment</span> is going to return how negative or positive your posts are for each post.</p>
         <p><span class="accent">Keywords</span> will return what words make your posts positive or negative.</p>
-        <button *ngIf="action" md-raised-button color="primary" (click)="getClassifications()">Analyze the sentiment of your posts!</button>
+        <button *ngIf="action" md-raised-button color="primary" (click)="getClassifications()">Analyze sentiment!</button>
     </div>
     <p *ngIf="loadingClassifications">I'm talking to servers... might be a few seconds.</p>
     <md-grid-list cols="3" rowHeight="50px" *ngIf="displayTiles && displayTiles.length > 0 && action === 'classify'">
@@ -25,13 +25,21 @@
             {{tile.text}}
         </md-grid-tile>
     </md-grid-list>
-    <md-grid-list cols="3" rowHeight="50px" *ngIf="displayTiles && displayTiles.length > 0 && action === 'keyword'">
-        <md-grid-tile>Facebook Post</md-grid-tile>
-        <md-grid-tile>Positive Sentiment</md-grid-tile>
-        <md-grid-tile>Negative Sentiment</md-grid-tile>
+    <div *ngIf="action">
+        <p>If the color is pink, this means your message is positive. The pinker, the more certain the positivity. The lighter, the less certain.</p>
+        <i *ngFor="let color of pink" [style.color]="color" class="material-icons">indeterminate_check_box</i>
+        <p>If the color is pink, this means your message is negative. The darker, the more certain the negativity. The lighter, the less certain.</p>
+        <i *ngFor="let color of blueGrey" [style.color]="color" class="material-icons">indeterminate_check_box</i>
+    </div>
+    <md-grid-list cols="3" rowHeight="25px" *ngIf="displayTiles && displayTiles.length > 0 && action === 'keyword'">
+        <md-grid-tile colspan="1" rowspan="2">Facebook Post</md-grid-tile>
+        <md-grid-tile colspan="2" rowspan="2">Keyword Results</md-grid-tile>
         <md-grid-tile
                 *ngFor="let tile of displayTiles"
-                [style.background]="tile.color">
+                [style.background]="tile.color"
+                [colspan] = "tile.colspan"
+                [rowspan] = "tile.rowspan"
+                [style.color] = "tile.textColor">
             {{tile.text}}
         </md-grid-tile>
     </md-grid-list>

@@ -13,6 +13,7 @@ import {UClassifyPlayComponent} from "./u-classify-play/u-classify-play.componen
 import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
 import {MaterialModule} from "@angular/material";
 import {TitleService} from "./title-service.service";
+import {ThemeService} from "./theme.service";
 
 const ROUTES = [
     {
@@ -53,7 +54,8 @@ const ROUTES = [
         PostsService,
         FbGraphService,
         UClassifyAPIService,
-        TitleService
+        TitleService,
+        ThemeService
     ],
     bootstrap: [AppComponent],
 })

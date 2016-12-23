@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers} from "@angular/http";
 import {Observable} from "rxjs";
+import {UcKeyword} from "./uc-keyword";
 
 @Injectable()
 export class UClassifyAPIService {
@@ -37,7 +38,7 @@ export class UClassifyAPIService {
         }];
     }
 
-    exampleKeyword() {
+    exampleKeyword() : Array<Array<UcKeyword>>{
         return [[{"className": "positive", "p": 0.604174, "keyword": "world"}, {
             "className": "positive",
             "p": 0.605051,

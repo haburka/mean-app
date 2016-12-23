@@ -11,6 +11,8 @@ import {UClassifyAPIService} from "../u-classify-api.service";
 import {FeedMessages} from "../feed-messages";
 import {UcReply} from "../uc-reply";
 import {TitleService} from "../title-service.service";
+import {UcKeyword} from "../uc-keyword";
+import {ThemeService} from "../theme.service";
 
 @Component({
     selector: 'app-fb-play',
@@ -33,13 +35,16 @@ export class FbPlayComponent implements OnInit {
     public loadingClassifications = false;
     public messages: Array<string>;
     public classifications: Array<UcReply>;
-    public displayTiles: Array<{color: string, text: string}> = [];
+    public displayTiles: Array<{color: string, text: string, colspan?: number, rowspan?: number, textColor?: string}> = [];
     public action: string;
+    public pink: Array<string>;
+    public blueGrey: Array<string>;
 
     constructor(
       private fb: FbGraphService,
       private uClassify: UClassifyAPIService,
-      private titleService: TitleService) {
+      private titleService: TitleService,
+      private theme: ThemeService) {
     }
 
     ngOnInit() {
@@ -48,6 +53,8 @@ export class FbPlayComponent implements OnInit {
         this.fbCheckLogin();
         this.isLoggedIn = true;
         this.titleService.title.next("Analyze your Facebook Posts");
+        this.pink = (<any>Object).values(this.theme.pink);
+        this.blueGrey = (<any>Object).values(this.theme.blueGrey);
     }
 
 
@@ -61,8 +68,12 @@ export class FbPlayComponent implements OnInit {
 
     getClassifications(){
         this.loadingClassifications = true;
-        this.messages = ["HELLLO THIS IS HOW MY LIFE GOT ALL MIXED UP AND IS UPSSIDE DOWN NOW I WISH I KNEW HWERE I WAS GOING DEAR GOD","world"];
-        this.parseClassifications(this.uClassify.exampleClassify());
+        this.messages = ["HELLLO THIS IS HOW MY LIFE GOT ALL MIXED UP AND IS UPSSIDE DOWN NOW I WISH I KNEW HWERE I WAS GOING DEAR GOD"]
+        if(this.action === "keyword"){
+            this.parseKeywords(this.uClassify.exampleKeyword())
+        } else if (this.action === "classify"){
+            this.parseClassifications(this.uClassify.exampleClassify());
+        }
         // if(!this.messages) {
         //     this.fb.fbGetAllPages("/me/posts", "GET", "message",1).then((resp: FeedMessages)=> {
         //         this.parseFeedMessages(resp);
@@ -84,6 +95,41 @@ export class FbPlayComponent implements OnInit {
         this.loadingClassifications = false;
     }
 
+    parseKeywords(val: Array<Array<UcKeyword>>){
+        this.loadingClassifications = false;
+        this.displayTiles = [];
+        this.messages.forEach((message: string, index: number) => {
+            let keywords = val[index];
+            if(keywords.length === 0){
+                this.displayTiles.push({ color: "white", text: message, colspan: 1, rowspan: 2});
+                this.displayTiles.push({ color: "white", text: "No keywords were found for this message", colspan: 2, rowspan: 2});
+            } else if (keywords.length === 1){
+                let keyword = keywords[0];
+                this.displayTiles.push({ color: "white", text: message, colspan: 1, rowspan: 2});
+                this.displayTiles.push({ color: this.getSentimentColor(keyword), text: this.getKeyWordText(keyword), colspan: 2, rowspan: 2, textColor:'white'});
+            } else {
+                this.displayTiles.push({ color: "white", text: message, colspan: 1, rowspan: keywords.length });
+                keywords.slice(0,5).forEach((keyword: UcKeyword) => {
+                    this.displayTiles.push({ color: this.getSentimentColor(keyword), text: this.getKeyWordText(keyword), colspan: 2, rowspan: 1, textColor:'white'});
+                });
+            }
+        });
+    }
+
+    private getSentimentColor(val: {p: number, className: string, keyword?: string}){
+        let color = "white";
+        if(val.className === "negative"){
+            color = this.theme.mdColor("accent",val.p * 100 * 10);
+        } else if(val.className === "positive"){
+            color = this.theme.mdColor("primary",val.p * 100 * 10);
+        }
+        return color;
+    }
+
+    private getKeyWordText(val: UcKeyword){
+        return val.keyword;
+    }
+
     parseClassifications(val: Array<UcReply>){
         this.classifications = val;
         this.loadingClassifications = false;
@@ -91,25 +137,7 @@ export class FbPlayComponent implements OnInit {
         this.messages.forEach((message: string, index: number) => {
             this.displayTiles.push({ color: "white", text: message});
             this.classifications[index].classification.forEach((val: {className: string, p: number, keyword: string,}) => {
-                let color;
-                if(val.className === "negative"){
-                    if(val.p < .25){
-                        color = "#b0bec5";
-                    } else if ( val.p < .75){
-                        color = "#78909c";
-                    } else{
-                        color = "#546e7a";
-                    }
-                } else if(val.className === "positive"){
-                    if(val.p < .25){
-                        color = "#f48fb1";
-                    } else if ( val.p < .75){
-                        color = "#ec407a";
-                    } else{
-                        color = "#d81b60";
-                    }
-                }
-                this.displayTiles.push({ color: color, text: Math.round(val.p * 100) + "%" + ": " + val.className });
+                this.displayTiles.push({ color: this.getSentimentColor(val), text: Math.round(val.p * 1000) / 10 + "%"});
             });
         });
     }
