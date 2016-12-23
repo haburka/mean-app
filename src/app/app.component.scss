@@ -8,6 +8,9 @@ md-toolbar{
 md-toolbar-row{
   background-color: md-color($primary,300);
   padding-left: 20px;
+  border-bottom: 1px solid md-color($accent);
+}
+md-toolbar-row:last-child{
 }
 button{
   font-size: 20px;

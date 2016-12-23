@@ -25,12 +25,12 @@ export class UClassifyAPIService {
             "textCoverage": 1,
             "classification": [
                 {"className": "negative", "p": 0.52003, "keyword": "idk"},
-                {"className": "positive", "p": 0.47997, "keyword": "idk"}
+                {"className": "positive", "p": 0.23, "keyword": "idk"}
             ],
         }, {
             "textCoverage": 1,
             "classification": [
-                {"className": "negative", "p": 0.709271, "keyword": "idk"},
+                {"className": "negative", "p": 0.76, "keyword": "idk"},
                 {"className": "positive", "p": 0.290729, "keyword": "idk"}
             ],
             "keyword": "idk"

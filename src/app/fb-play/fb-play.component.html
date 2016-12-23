@@ -14,31 +14,27 @@
         <p><span class="accent">Keywords</span> will return what words make your posts positive or negative.</p>
         <button *ngIf="action" md-raised-button color="primary" (click)="getClassifications()">Analyze the sentiment of your posts!</button>
     </div>
-    <md-grid-list cols="3" rowHeight="25px" *ngIf="messages && action === 'classify'">
+    <p *ngIf="loadingClassifications">I'm talking to servers... might be a few seconds.</p>
+    <md-grid-list cols="3" rowHeight="50px" *ngIf="displayTiles && displayTiles.length > 0 && action === 'classify'">
+        <md-grid-tile>Facebook Post</md-grid-tile>
+        <md-grid-tile>Negative Sentiment</md-grid-tile>
+        <md-grid-tile>Positive Sentiment</md-grid-tile>
+        <md-grid-tile
+                *ngFor="let tile of displayTiles"
+                [style.background]="tile.color">
+            {{tile.text}}
+        </md-grid-tile>
+    </md-grid-list>
+    <md-grid-list cols="3" rowHeight="50px" *ngIf="displayTiles && displayTiles.length > 0 && action === 'keyword'">
         <md-grid-tile>Facebook Post</md-grid-tile>
         <md-grid-tile>Positive Sentiment</md-grid-tile>
         <md-grid-tile>Negative Sentiment</md-grid-tile>
-        <md-grid-tile colspan="3" *ngFor="let obj of displayClassifications">
-            <md-grid-tile>
-                {{obj.message}}
-            </md-grid-tile>
-            <md-grid-tile *ngFor="let res of obj.classification">
-                {{res.p}}% {{res.className}}
-            </md-grid-tile>
+        <md-grid-tile
+                *ngFor="let tile of displayTiles"
+                [style.background]="tile.color">
+            {{tile.text}}
         </md-grid-tile>
     </md-grid-list>
-    <table class="table" *ngIf="messages && classifications && action === 'classify'" style="width:100%;">
-        <thead>
-        <tr>
-            <th>Facebook Post</th>
-            <th>Positive Sentiment</th>
-            <th>Negative Sentiment</th>
-        </tr>
-        </thead>
-        <tbody>
-
-        </tbody>
-    </table>
     <div *ngIf="loading">
         It takes about 10 seconds... fetching that data.... If it takes longer, app is probably broken
     </div>

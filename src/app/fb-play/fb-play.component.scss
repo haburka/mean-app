@@ -4,9 +4,8 @@
 .container{
   background-color: white;
   min-height: 100vh;
-  border-right: 15px solid md-color($primary);
-  border-left: 15px solid md-color($primary);
-  border-top: 1px solid md-color($accent);
+  border-right: 16px solid md-color($primary);
+  border-left: 16px solid md-color($primary);
   padding-left: 20px;
   padding-top: 20px;
 }
@@ -14,5 +13,26 @@
   color: #212121;
 }
 .accent{
-  color: md-color($accent);
+  color: md-color($accent,800);
+}
+.negative{
+  background-color: md-color($accent);
+}
+.negative-low{
+  background-color: md-color($accent,200);
+}
+.negative-high{
+  background-color: md-color($accent,600);
+}
+.positive{
+  background-color: md-color($primary);
+}
+.positive-low{
+  background-color: md-color($primary,200);
+}
+.positive-high{
+  background-color: md-color($primary,600);
+}
+.white{
+  background-color: white;
 }

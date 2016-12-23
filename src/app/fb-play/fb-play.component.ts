@@ -33,7 +33,7 @@ export class FbPlayComponent implements OnInit {
     public loadingClassifications = false;
     public messages: Array<string>;
     public classifications: Array<UcReply>;
-    public displayClassifications: Array<{message: string, classification: UcReply}>;
+    public displayTiles: Array<{color: string, text: string}> = [];
     public action: string;
 
     constructor(
@@ -61,11 +61,13 @@ export class FbPlayComponent implements OnInit {
 
     getClassifications(){
         this.loadingClassifications = true;
-        if(!this.messages) {
-            this.fb.fbGetAllPages("/me/posts", "GET", "message",1).then((resp: FeedMessages)=> {
-                this.parseFeedMessages(resp);
-            });
-        }
+        this.messages = ["HELLLO THIS IS HOW MY LIFE GOT ALL MIXED UP AND IS UPSSIDE DOWN NOW I WISH I KNEW HWERE I WAS GOING DEAR GOD","world"];
+        this.parseClassifications(this.uClassify.exampleClassify());
+        // if(!this.messages) {
+        //     this.fb.fbGetAllPages("/me/posts", "GET", "message",1).then((resp: FeedMessages)=> {
+        //         this.parseFeedMessages(resp);
+        //     });
+        // }
     }
 
     parseFeedMessages(feed: FeedMessages){
@@ -74,19 +76,42 @@ export class FbPlayComponent implements OnInit {
             .filter((val) => typeof val !== "undefined");
         this.uClassify.ucPost("Sentiment", "uClassify", this.messages,this.action)
             .subscribe(
-                (val: Array<UcReply>) => {
-                    console.log(val);
-                    this.classifications = val;
-                    this.loadingClassifications = false;
-                    this.displayClassifications = this.messages.map((message: string, index: number) => {
-                        return {message: message,classification: this.classifications[index]};
-                    });
-                },
+                (val: Array<UcReply>) => this.parseClassifications(val),
                 (err) => {
                     this.error = err;
                 }
             );
         this.loadingClassifications = false;
+    }
+
+    parseClassifications(val: Array<UcReply>){
+        this.classifications = val;
+        this.loadingClassifications = false;
+        this.displayTiles = [];
+        this.messages.forEach((message: string, index: number) => {
+            this.displayTiles.push({ color: "white", text: message});
+            this.classifications[index].classification.forEach((val: {className: string, p: number, keyword: string,}) => {
+                let color;
+                if(val.className === "negative"){
+                    if(val.p < .25){
+                        color = "#b0bec5";
+                    } else if ( val.p < .75){
+                        color = "#78909c";
+                    } else{
+                        color = "#546e7a";
+                    }
+                } else if(val.className === "positive"){
+                    if(val.p < .25){
+                        color = "#f48fb1";
+                    } else if ( val.p < .75){
+                        color = "#ec407a";
+                    } else{
+                        color = "#d81b60";
+                    }
+                }
+                this.displayTiles.push({ color: color, text: Math.round(val.p * 100) + "%" + ": " + val.className });
+            });
+        });
     }
 
     parseResponse(val){
