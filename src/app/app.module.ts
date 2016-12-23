@@ -12,6 +12,7 @@ import {UClassifyAPIService} from "./u-classify-api.service";
 import {UClassifyPlayComponent} from "./u-classify-play/u-classify-play.component";
 import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
 import {MaterialModule} from "@angular/material";
+import {TitleService} from "./title-service.service";
 
 const ROUTES = [
     {
@@ -49,9 +50,10 @@ const ROUTES = [
         MaterialModule.forRoot()
     ],
     providers: [
-      PostsService,
-      FbGraphService,
-      UClassifyAPIService
+        PostsService,
+        FbGraphService,
+        UClassifyAPIService,
+        TitleService
     ],
     bootstrap: [AppComponent],
 })

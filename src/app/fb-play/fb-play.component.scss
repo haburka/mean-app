@@ -1,0 +1,18 @@
+@import '~@angular/material/core/theming/theming';
+@import '~@angular/material/core/theming/prebuilt/pink-bluegrey';
+
+.container{
+  background-color: white;
+  min-height: 100vh;
+  border-right: 15px solid md-color($primary);
+  border-left: 15px solid md-color($primary);
+  border-top: 1px solid md-color($accent);
+  padding-left: 20px;
+  padding-top: 20px;
+}
+*{
+  color: #212121;
+}
+.accent{
+  color: md-color($accent);
+}

@@ -1,0 +1,14 @@
+@import '~@angular/material/core/theming/theming';
+@import '~@angular/material/core/theming/prebuilt/pink-bluegrey';
+
+md-toolbar{
+  background-color: md-color($primary);
+  border-color: md-color($accent, A400);
+}
+md-toolbar-row{
+  background-color: md-color($primary,300);
+  padding-left: 20px;
+}
+button{
+  font-size: 20px;
+}

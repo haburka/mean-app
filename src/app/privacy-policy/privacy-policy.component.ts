@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {TitleService} from "../title-service.service";
 
 @Component({
   selector: 'app-privacy-policy',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PrivacyPolicyComponent implements OnInit {
 
-  constructor() { }
+  constructor(private title: TitleService) { }
 
   ngOnInit() {
+      this.title.title.next("Privacy Policy");
   }
 
 }

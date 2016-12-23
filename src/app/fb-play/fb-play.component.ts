@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, EventEmitter, Output} from '@angular/core';
 import {FbGraphService} from "../fb-graph.service";
 import {PicResponse} from "../pic-response";
 import {PicData} from "../pic-data";
@@ -10,11 +10,12 @@ import {Likes} from "../likes";
 import {UClassifyAPIService} from "../u-classify-api.service";
 import {FeedMessages} from "../feed-messages";
 import {UcReply} from "../uc-reply";
+import {TitleService} from "../title-service.service";
 
 @Component({
     selector: 'app-fb-play',
     templateUrl: './fb-play.component.html',
-    styleUrls: ['./fb-play.component.css']
+    styleUrls: ['./fb-play.component.scss']
 })
 export class FbPlayComponent implements OnInit {
 
@@ -32,16 +33,21 @@ export class FbPlayComponent implements OnInit {
     public loadingClassifications = false;
     public messages: Array<string>;
     public classifications: Array<UcReply>;
+    public displayClassifications: Array<{message: string, classification: UcReply}>;
     public action: string;
+
     constructor(
       private fb: FbGraphService,
-      private uClassify: UClassifyAPIService) {
+      private uClassify: UClassifyAPIService,
+      private titleService: TitleService) {
     }
 
     ngOnInit() {
         this.fb.loggedIn$.subscribe((val)=>this.isLoggedIn = val);
         this.fb.error$.subscribe((val)=>this.error = val);
         this.fbCheckLogin();
+        this.isLoggedIn = true;
+        this.titleService.title.next("Analyze your Facebook Posts");
     }
 
 
@@ -72,6 +78,9 @@ export class FbPlayComponent implements OnInit {
                     console.log(val);
                     this.classifications = val;
                     this.loadingClassifications = false;
+                    this.displayClassifications = this.messages.map((message: string, index: number) => {
+                        return {message: message,classification: this.classifications[index]};
+                    });
                 },
                 (err) => {
                     this.error = err;
