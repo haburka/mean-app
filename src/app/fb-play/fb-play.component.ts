@@ -51,7 +51,6 @@ export class FbPlayComponent implements OnInit {
         this.fb.loggedIn$.subscribe((val)=>this.isLoggedIn = val);
         this.fb.error$.subscribe((val)=>this.error = val);
         this.fbCheckLogin();
-        this.isLoggedIn = true;
         this.titleService.title.next("Analyze your Facebook Posts");
         this.pink = (<any>Object).values(this.theme.pink);
         this.blueGrey = (<any>Object).values(this.theme.blueGrey);
@@ -68,26 +67,26 @@ export class FbPlayComponent implements OnInit {
 
     getClassifications(){
         this.loadingClassifications = true;
-        this.messages = ["HELLLO THIS IS HOW MY LIFE GOT ALL MIXED UP AND IS UPSSIDE DOWN NOW I WISH I KNEW HWERE I WAS GOING DEAR GOD"]
+        let func;
         if(this.action === "keyword"){
-            this.parseKeywords(this.uClassify.exampleKeyword())
+            func = (val) => this.parseKeywords(val);
         } else if (this.action === "classify"){
-            this.parseClassifications(this.uClassify.exampleClassify());
+            func = (val) => this.parseClassifications(val);
         }
-        // if(!this.messages) {
-        //     this.fb.fbGetAllPages("/me/posts", "GET", "message",1).then((resp: FeedMessages)=> {
-        //         this.parseFeedMessages(resp);
-        //     });
-        // }
+        if(!this.messages) {
+            this.fb.fbGetAllPages("/me/posts", "GET", "message",1).then((resp: FeedMessages)=> {
+                this.parseFeedMessages(resp,func);
+            });
+        }
     }
 
-    parseFeedMessages(feed: FeedMessages){
+    parseFeedMessages(feed: FeedMessages, func: any){
         this.messages = feed.data
             .map((val: {message:string})=> val.message)
             .filter((val) => typeof val !== "undefined");
         this.uClassify.ucPost("Sentiment", "uClassify", this.messages,this.action)
             .subscribe(
-                (val: Array<UcReply>) => this.parseClassifications(val),
+                (val: Array<UcReply>) => func(val),
                 (err) => {
                     this.error = err;
                 }
