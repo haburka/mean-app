@@ -39,7 +39,7 @@ export class FbPlayComponent implements OnInit {
     public action: string;
     public pink: Array<string>;
     public blueGrey: Array<string>;
-
+    public customText: string;
     constructor(
       private fb: FbGraphService,
       private uClassify: UClassifyAPIService,
@@ -54,7 +54,7 @@ export class FbPlayComponent implements OnInit {
         this.titleService.title.next("Analyze your Facebook Posts");
         this.pink = (<any>Object).values(this.theme.pink);
         this.blueGrey = (<any>Object).values(this.theme.blueGrey);
-s    }
+    }
 
 
     fbLogin(){
@@ -76,6 +76,9 @@ s    }
         // this.messages = this.uClassify.exampleMessages();
         // this.parseKeywords(this.uClassify.exampleKeyword());
         // return;
+        if(this.customText){
+            this.parseCustomText(this.customText,func);
+        }
         if(!this.messages) {
             this.fb.fbGetAllPages("/me/posts", "GET", "message",1).then((resp: FeedMessages)=> {
                 this.parseFeedMessages(resp,func);
@@ -89,6 +92,18 @@ s    }
         this.messages = feed.data
             .map((val: {message:string})=> val.message)
             .filter((val) => typeof val !== "undefined");
+        this.uClassify.ucPost("Sentiment", "uClassify", this.messages,this.action)
+            .subscribe(
+                (val: Array<UcReply>) => func(val),
+                (err) => {
+                    this.error = err;
+                }
+            );
+        this.loadingClassifications = false;
+    }
+
+    parseCustomText(text: string, func: any){
+        this.messages = [text];
         this.uClassify.ucPost("Sentiment", "uClassify", this.messages,this.action)
             .subscribe(
                 (val: Array<UcReply>) => func(val),

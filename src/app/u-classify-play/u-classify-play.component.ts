@@ -16,7 +16,7 @@ export class UClassifyPlayComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.res = this.uClassify.exampleClassify();
+    // this.res = this.uClassify.exampleClassify();
   }
 
 }

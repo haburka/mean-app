@@ -2,10 +2,14 @@
     <div *ngIf="!isLoggedIn">
         <p>You have to log into facebook so that I can analyze your posts. They will not be saved! </p>
         <button md-button color="primary" (click)="fbLogin()">Click here to login</button>
+        <p>If you don't want to login through facebook, then you can just paste text into the box below.</p>
     </div>
 
-    <div *ngIf="isLoggedIn && !loadingClassifications">
-        <p>Now that you're logged in, we can begin analyzing. First, select a style of classification.</p>
+    <input md-input placeholder="Put in your own text here:" value="..." [(ngModel)]="customText">
+
+    <div *ngIf="(isLoggedIn || customText) && !loadingClassifications">
+        <p *ngIf="isLoggedIn">Now that you're logged in, we can begin analyzing. First, select a style of classification.</p>
+        <p *ngIf="customText">Now that you've added your own text, we can begin analyzing. First, select a style of classification.</p>
         <md-radio-group [(ngModel)]="action">
             <md-radio-button value="classify">Overall Sentiment</md-radio-button>
             <md-radio-button value="keyword">Keywords</md-radio-button>
@@ -13,6 +17,8 @@
         <p><span class="accent">Overall Sentiment</span> is going to return how negative or positive your posts are for each post.</p>
         <p><span class="accent">Keywords</span> will return what words make your posts positive or negative.</p>
         <button *ngIf="action" md-raised-button color="primary" (click)="getClassifications()">Analyze sentiment!</button>
+        <p color="accent" *ngIf="customText">Using your text</p>
+        <p color="accent" *ngIf="isLoggedIn">Using your Facebook Posts</p>
     </div>
     <p *ngIf="loadingClassifications">I'm talking to servers... might be a few seconds.</p>
     <md-grid-list cols="3" rowHeight="50px" *ngIf="displayTiles && displayTiles.length > 0 && action === 'classify'">
