@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Feed} from "./feed";
 import {Http} from "@angular/http";
 import {BehaviorSubject} from "rxjs";
+import {Feed} from "../models/feed";
 
 @Injectable()
 export class FbGraphService {
@@ -19,7 +19,6 @@ export class FbGraphService {
 
     fbLogin(){
         window['FB'].login((response) => {
-            console.log(response);
             if (response.status === 'connected') {
                 this.token = response.accessToken;
                 this.loggedIn$.next(true);

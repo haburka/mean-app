@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {UClassifyAPIService} from "../u-classify-api.service";
-import {UcReply} from "../uc-reply";
+import {UcReply} from "../shared/models/uc-reply";
+import {UClassifyAPIService} from "../shared/services/u-classify-api.service";
 
 @Component({
   selector: 'app-u-classify-play',

@@ -1,7 +1,19 @@
 <md-toolbar>
     <span>
-        <button md-button  routerLink="/fb" routerLinkActive="active">Facebook Analysis</button>
-        <button md-button  routerLink="/privacy" routerLinkActive="active">Privacy</button>
+      <md-sidenav #sidenav class="sidenav" [style.display]="sidenavActive">
+        <button md-button color="accent" (click)="toggleSidenav()"><i class="material-icons">close</i></button>
+        <button md-button routerLink="/fb" routerLinkActive="active">Facebook Analysis</button>
+        <button md-button routerLink="/mood" routerLinkActive="active">Mood Classification</button>
+        <button md-button routerLink="/sentiment" routerLinkActive="active">Sentiment Classification</button>
+        <button md-button routerLink="/custom-classification" routerLinkActive="active">Custom Classification</button>
+        <button md-button routerLink="/privacy" routerLinkActive="active">Privacy</button>
+      </md-sidenav>
+
+      <div class="sidenav-content">
+        <button md-raised-button class="menu-button" (click)="toggleSidenav()">
+          Menu
+        </button>
+      </div>
     </span>
 
     <md-toolbar-row>
@@ -9,4 +21,6 @@
     </md-toolbar-row>
 
 </md-toolbar>
-<router-outlet></router-outlet>
+<div class="container">
+    <router-outlet></router-outlet>
+</div>

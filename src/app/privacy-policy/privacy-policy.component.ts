@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {TitleService} from "../title-service.service";
+import {TitleService} from "../shared/services/title-service.service";
 
 @Component({
   selector: 'app-privacy-policy',

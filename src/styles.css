@@ -9,3 +9,6 @@ figure > p {
     text-overflow: ellipsis;
     height: 100%;
 }
+*{
+    font-family: 'Arvo', serif;
+}

@@ -15,3 +15,21 @@ md-toolbar-row:last-child{
 button{
   font-size: 20px;
 }
+md-sidenav{
+  position: fixed;
+  top: 1px;
+  left: -5px;
+  z-index: 1;
+}
+.container{
+  background-color: white;
+  min-height: 100vh;
+  border-right: 16px solid md-color($primary);
+  border-left: 16px solid md-color($primary);
+  padding-left: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.menu-button{
+  background-color: md-color($primary,300);
+}

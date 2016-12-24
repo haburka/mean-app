@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers} from "@angular/http";
 import {Observable} from "rxjs";
-import {UcKeyword} from "./uc-keyword";
+import {UcKeyword} from "../models/uc-keyword";
 
 @Injectable()
 export class UClassifyAPIService {

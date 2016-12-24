@@ -5,4 +5,7 @@ import {BehaviorSubject} from "rxjs";
 export class TitleService {
     title = new BehaviorSubject<string>("App Works");
   constructor() { }
+  next(val: string){
+      this.title.next(val);
+  }
 }

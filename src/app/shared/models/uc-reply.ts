@@ -3,6 +3,6 @@ export class UcReply {
     classification: Array<{
         className: string,
         p: number,
-        keyword: string,
+        keyword?: string,
     }>;
 }

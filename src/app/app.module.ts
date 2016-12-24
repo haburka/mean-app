@@ -3,18 +3,23 @@ import {NgModule} from "@angular/core";
 import {FormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
 import {AppComponent} from "./app.component";
-import {PostsComponent} from "./posts/posts.component";
 import {RouterModule} from "@angular/router";
-import {PostsService} from "./posts.service";
-import {FbGraphService} from "./fb-graph.service";
 import {FbPlayComponent} from "./fb-play/fb-play.component";
-import {UClassifyAPIService} from "./u-classify-api.service";
 import {UClassifyPlayComponent} from "./u-classify-play/u-classify-play.component";
 import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
 import {MaterialModule} from "@angular/material";
-import {TitleService} from "./title-service.service";
-import {ThemeService} from "./theme.service";
-import { LargeNumberPipe } from './large-number.pipe';
+import {CustomClassificationComponent} from "./custom-classification/custom-classification.component";
+import {SentimentClassificationComponent} from "./sentiment-classification/sentiment-classification.component";
+import {MoodClassificationComponent} from "./mood-classification/mood-classification.component";
+import {LargeNumberPipe} from "./shared/pipes/large-number.pipe";
+import {ClassifierComponent} from "./shared/components/classifier/classifier.component";
+import {FbGraphService} from "./shared/services/fb-graph.service";
+import {UClassifyAPIService} from "./shared/services/u-classify-api.service";
+import {UserDataService} from "./shared/services/user-data.service";
+import {ThemeService} from "./shared/services/theme.service";
+import {TitleService} from "./shared/services/title-service.service";
+import {GetMessagesComponent} from "./shared/components/get-messages/get-messages.component";
+import {FbLoginComponent} from "./shared/components/fb-login/fb-login.component";
 
 const ROUTES = [
     {
@@ -22,16 +27,20 @@ const ROUTES = [
         component: PrivacyPolicyComponent
     },
     {
-        path: 'posts',
-        component: PostsComponent
-    },
-    {
         path: 'fb',
         component: FbPlayComponent
     },
     {
-        path: 'uClassify',
-        component: UClassifyPlayComponent
+        path: 'sentiment',
+        component: SentimentClassificationComponent
+    },
+    {
+        path: 'mood',
+        component: MoodClassificationComponent
+    },
+    {
+        path: 'custom-classification',
+        component: CustomClassificationComponent
     }
 ];
 
@@ -39,11 +48,16 @@ const ROUTES = [
 @NgModule({
     declarations: [
         AppComponent,
-        PostsComponent,
         FbPlayComponent,
         UClassifyPlayComponent,
         PrivacyPolicyComponent,
         LargeNumberPipe,
+        CustomClassificationComponent,
+        SentimentClassificationComponent,
+        MoodClassificationComponent,
+        ClassifierComponent,
+        GetMessagesComponent,
+        FbLoginComponent,
     ],
     imports: [
         BrowserModule,
@@ -53,11 +67,11 @@ const ROUTES = [
         MaterialModule.forRoot()
     ],
     providers: [
-        PostsService,
         FbGraphService,
         UClassifyAPIService,
         TitleService,
-        ThemeService
+        ThemeService,
+        UserDataService
     ],
     bootstrap: [AppComponent],
 })

@@ -1,0 +1,47 @@
+<div class="container">
+    <div *ngIf="readyToParse && !loadingClassifications">
+        <p>Select a style of classification.</p>
+        <md-radio-group [(ngModel)]="action">
+            <md-radio-button value="classify">Overall {{classifier}}</md-radio-button>
+            <md-radio-button value="keywords">Keywords</md-radio-button>
+        </md-radio-group>
+        <p><span class="accent">Overall {{classifier}}</span> is going to return the {{classifier}} for each of your posts.</p>
+        <p><span class="accent">Keywords</span> will return what words make your posts classify as {{classifier}}</p>
+        <button *ngIf="action && !loadingClassifications" md-raised-button color="primary" (click)="getClassifications()">Analyze {{classifier}}</button>
+    </div>
+    <p *ngIf="loadingClassifications">
+        <md-spinner></md-spinner>
+        I'm talking to servers... might be a few seconds.</p>
+    <div *ngIf="classesFound === false">
+        <p>The message you're parsing is not large enough. Please include a bigger sample to get proper results.</p>
+    </div>
+    <div *ngIf="displayTiles && displayTiles.length > 0 && classesFound === true">
+        <p>If the color is pink, this means your message is {{classes[0]}}. The pinker, the more certain. The lighter, the less certain.</p>
+        <i *ngFor="let color of pink" [style.color]="color" class="material-icons">indeterminate_check_box</i>
+        <p>If the color is blue, this means your message is {{classes[1]}}. The darker, the more certain. The lighter, the less certain.</p>
+        <i *ngFor="let color of blueGrey" [style.color]="color" class="material-icons">indeterminate_check_box</i>
+    </div>
+    <md-grid-list cols="3" rowHeight="50px" *ngIf="displayTiles && displayTiles.length > 0 && action === 'classify' && classesFound == true">
+        <md-grid-tile>Your Text</md-grid-tile>
+        <md-grid-tile>{{classifier}}: {{classes[0]}}</md-grid-tile>
+        <md-grid-tile>{{classifier}}: {{classes[1]}}</md-grid-tile>
+        <md-grid-tile
+                *ngFor="let tile of displayTiles"
+                [style.background]="tile.color">
+            {{tile.text}}
+        </md-grid-tile>
+    </md-grid-list>
+    <md-grid-list cols="3" rowHeight="3em" *ngIf="displayTiles && displayTiles.length > 0 && action === 'keywords' && classesFound == true">
+        <md-grid-tile colspan="2" rowspan="2">Your Text</md-grid-tile>
+        <md-grid-tile colspan="1" rowspan="2">Keyword Results</md-grid-tile>
+        <md-grid-tile
+                *ngFor="let tile of displayTiles"
+                [style.background]="tile.color"
+                [colspan] = "tile.colspan"
+                [rowspan] = "tile.rowspan"
+                [style.color] = "tile.textColor">
+            <p>{{tile.text}}</p>
+        </md-grid-tile>
+    </md-grid-list>
+    <p *ngIf="error">Error: {{error}}</p>
+</div>

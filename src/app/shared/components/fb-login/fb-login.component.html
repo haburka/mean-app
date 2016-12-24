@@ -1,0 +1,7 @@
+<div *ngIf="!isLoggedIn">
+    <p>If you want to use your facebook posts as your data, please login: </p>
+    <button md-raised-button color="primary" (click)="fbLogin()">Click here to login</button>
+</div>
+<div *ngIf="error">
+    <p>{{error}}</p>
+</div>
