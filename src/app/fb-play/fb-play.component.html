@@ -2,10 +2,31 @@
     <div *ngIf="!isLoggedIn">
         <p>You have to log into facebook so that I can analyze your posts. They will not be saved! </p>
         <button md-button color="primary" (click)="fbLogin()">Click here to login</button>
-        <p>If you don't want to login through facebook, then you can just paste text into the box below.</p>
     </div>
-
+    <p>If you don't want to login through facebook, then you can just paste text into the box below.</p>
     <input md-input placeholder="Put in your own text here:" value="..." [(ngModel)]="customText">
+    <p>
+        If you want, you can change which classifier you're using. To do this, <a href="https://www.uclassify.com/browse">go to the uClassify Page</a>
+        and select your own classifier and the appropriate username for it. For example, if I wanted to use the mood classifier I would put Mood into
+        the classifier box and prfekt into the username box.
+    </p>
+    <input md-input placeholder="Change the Classifier here:" value="Sentiment" [(ngModel)]="classifier">
+    <input md-input placeholder="Change the username for the classifier here:" value="uClassify" [(ngModel)]="username">
+    <button md-raised-button color="primary" *ngIf="classifier && username" (click)="checkClassifier()">Get info about the Classifier</button>
+    <md-grid-list cols="12" rowHeight="25px" *ngIf="classifierInfo && classifierInfo.length > 0">
+        <md-grid-tile colspan="6" rowspan="2">Class Name</md-grid-tile>
+        <md-grid-tile colspan="3" rowspan="2">Words Trained</md-grid-tile>
+        <md-grid-tile colspan="3" rowspan="2">Unique Words</md-grid-tile>
+        <md-grid-tile
+                *ngFor="let tile of classifierInfo"
+                [style.background]="tile.color"
+                [colspan] = "tile.colspan"
+                [rowspan] = "tile.rowspan"
+                [style.color] = "tile.textColor">
+            <p>{{tile.text | largeNumber}}</p>
+        </md-grid-tile>
+    </md-grid-list>
+
 
     <div *ngIf="(isLoggedIn || customText) && !loadingClassifications">
         <p *ngIf="isLoggedIn">Now that you're logged in, we can begin analyzing. First, select a style of classification.</p>
@@ -16,7 +37,7 @@
         </md-radio-group>
         <p><span class="accent">Overall Sentiment</span> is going to return how negative or positive your posts are for each post.</p>
         <p><span class="accent">Keywords</span> will return what words make your posts positive or negative.</p>
-        <button *ngIf="action" md-raised-button color="primary" (click)="getClassifications()">Analyze sentiment!</button>
+        <button *ngIf="action && !hasClicked" md-raised-button color="primary" (click)="getClassifications()">Analyze sentiment!</button>
         <p *ngIf="hasClicked">If you want to do a different classification, please reload.</p>
         <button *ngIf="hasClicked" md-raised-button color="primary" onClick="window.location.reload()">Reload the page</button>
     </div>
@@ -28,7 +49,7 @@
         <i *ngFor="let color of blueGrey" [style.color]="color" class="material-icons">indeterminate_check_box</i>
     </div>
     <md-grid-list cols="3" rowHeight="50px" *ngIf="displayTiles && displayTiles.length > 0 && action === 'classify'">
-        <md-grid-tile>Facebook Post</md-grid-tile>
+        <md-grid-tile>Your Text</md-grid-tile>
         <md-grid-tile>Negative Sentiment</md-grid-tile>
         <md-grid-tile>Positive Sentiment</md-grid-tile>
         <md-grid-tile
@@ -38,7 +59,7 @@
         </md-grid-tile>
     </md-grid-list>
     <md-grid-list cols="3" rowHeight="3em" *ngIf="displayTiles && displayTiles.length > 0 && action === 'keywords'">
-        <md-grid-tile colspan="2" rowspan="2">Facebook Post</md-grid-tile>
+        <md-grid-tile colspan="2" rowspan="2">Your Text</md-grid-tile>
         <md-grid-tile colspan="1" rowspan="2">Keyword Results</md-grid-tile>
         <md-grid-tile
                 *ngFor="let tile of displayTiles"
@@ -52,7 +73,7 @@
     <div *ngIf="loading">
         It takes about 10 seconds... fetching that data.... If it takes longer, app is probably broken
     </div>
-    <p *ngIf="error">We got an error, Please tell rob this: {{error}}</p>
+    <p *ngIf="error">Error: {{error}}</p>
 </div>
 <!--
 <div *ngIf="isLoggedIn && !loading">

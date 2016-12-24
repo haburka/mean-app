@@ -14,6 +14,7 @@ import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component"
 import {MaterialModule} from "@angular/material";
 import {TitleService} from "./title-service.service";
 import {ThemeService} from "./theme.service";
+import { LargeNumberPipe } from './large-number.pipe';
 
 const ROUTES = [
     {
@@ -42,6 +43,7 @@ const ROUTES = [
         FbPlayComponent,
         UClassifyPlayComponent,
         PrivacyPolicyComponent,
+        LargeNumberPipe,
     ],
     imports: [
         BrowserModule,

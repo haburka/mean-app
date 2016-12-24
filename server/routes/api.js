@@ -25,6 +25,34 @@ router.get('/posts', (req, res) => {
         console.log(db);
     })
 });
+router.post('/classify-check', upload.array(), (req, userRes) => {
+    let username, classifier;
+
+    username = req.body.username;
+    classifier = req.body.classifier;
+    console.log(req.body);
+    request.get(
+        "https://api.uclassify.com/v1/"+username+"/"+classifier,
+        {headers: {Authorization: "Token LkVogjbE2b4h"}},
+        function (error,response,body) {
+            if (!error && response.statusCode == 200) {
+                console.log("body",body);
+                userRes.write(body);
+                userRes.end();
+            } else if(error){
+                userRes.json(error);
+                console.log("error",error);
+                userRes.end();
+            } else if(response.statusCode == 500){
+                console.log(response.body);
+            } else if(response.statusCode == 400){
+                console.log(response.statusCode,response.body);
+                userRes.write(response.body);
+                userRes.end();
+            }
+        }
+    )
+});
 router.post('/classify', upload.array(), (req, userRes) => {
     let username, classifier, texts, action;
 
@@ -50,8 +78,12 @@ router.post('/classify', upload.array(), (req, userRes) => {
                 userRes.json(error);
                 console.log("error",error);
                 userRes.end();
-            } else if(response.statusCode == 500){
-                console.log(response.body);
+            } else if(response.statusCode == 400) {
+                console.log(response.statusCode, response.body);
+                userRes.json(response.body);
+                userRes.end();
+            }else {
+                console.log(response.body,response.statusCode);
             }
         }
     );

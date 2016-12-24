@@ -8,6 +8,7 @@
   border-left: 16px solid md-color($primary);
   padding-left: 20px;
   padding-top: 20px;
+  padding-bottom: 20px;
 }
 *{
   color: #212121;
@@ -18,4 +19,7 @@ md-grid-tile{
 }
 md-grid-list{
   width: 96%;
+}
+button{
+  margin:10px;
 }

@@ -13,6 +13,7 @@ import {UcReply} from "../uc-reply";
 import {TitleService} from "../title-service.service";
 import {UcKeyword} from "../uc-keyword";
 import {ThemeService} from "../theme.service";
+import {UcInfo} from "../uc-info";
 
 @Component({
     selector: 'app-fb-play',
@@ -36,11 +37,14 @@ export class FbPlayComponent implements OnInit {
     public messages: Array<string>;
     public classifications: Array<UcReply>;
     public displayTiles: Array<{color: string, text: string, colspan?: number, rowspan?: number, textColor?: string}> = [];
+    public classifierInfo: Array<{color: string, text: string, colspan?: number, rowspan?: number, textColor?: string}> = [];
     public action: string;
     public pink: Array<string>;
     public blueGrey: Array<string>;
     public customText: string;
     public hasClicked = false;
+    public username: string;
+    public classifier: string;
     constructor(
       private fb: FbGraphService,
       private uClassify: UClassifyAPIService,
@@ -57,6 +61,28 @@ export class FbPlayComponent implements OnInit {
         this.blueGrey = (<any>Object).values(this.theme.blueGrey);
     }
 
+    parseClassifierInfo(result: Array<UcInfo>){
+        if(result["statusCode"] || result["message"]){
+            this.error = "Error while looking for classifier." + result["message"] + " returned with a status code of: " +result["statusCode"];
+            return;
+        }
+        result.forEach((val: UcInfo) => {
+            this.classifierInfo.push({color: "white", text: val.className, colspan: 6, rowspan: 1});
+            this.classifierInfo.push({color: "white", text: ""+val.totalCount, colspan: 3, rowspan: 1}); //""+ converts to string
+            this.classifierInfo.push({color: "white", text: ""+val.uniqueFeatures, colspan: 3, rowspan: 1});
+        });
+    }
+
+    checkClassifier(){
+        this.uClassify.ucGetInfo(this.classifier, this.username)
+            .subscribe(
+                (val: any) => this.parseClassifierInfo(val),
+                (err) => {
+                    this.error = err;
+                }
+            );
+    }
+
 
     fbLogin(){
         this.fb.fbLogin();
@@ -69,53 +95,51 @@ export class FbPlayComponent implements OnInit {
     getClassifications(){
         this.hasClicked = true;
         this.loadingClassifications = true;
-        let func;
-        if(this.action === "keywords"){
-            func = (val) => this.parseKeywords(val);
-        } else if (this.action === "classify"){
-            func = (val) => this.parseClassifications(val);
-        }
         // this.messages = this.uClassify.exampleMessages();
         // this.parseKeywords(this.uClassify.exampleKeyword());
         // return;
         if(this.customText){
-            this.parseCustomText(this.customText,func);
-        }
-        if(!this.messages) {
+            this.parseCustomText(this.customText);
+        }else if(!this.messages) {
             this.fb.fbGetAllPages("/me/posts", "GET", "message",1).then((resp: FeedMessages)=> {
-                this.parseFeedMessages(resp,func);
+                this.parseFeedMessages(resp);
             });
         } else {
-            this.parseFeedMessages(null,func);
+            this.parseFeedMessages(null);
         }
     }
 
-    parseFeedMessages(feed: FeedMessages, func: any){
+    parseFeedMessages(feed: FeedMessages){
         if(!this.messages){
             this.messages = feed.data
                 .map((val: {message:string})=> val.message)
                 .filter((val) => typeof val !== "undefined");
         }
-        this.uClassify.ucPost("Sentiment", "uClassify", this.messages,this.action)
-            .subscribe(
-                (val: any) => func(val),
-                (err) => {
-                    this.error = err;
-                }
-            );
-        this.loadingClassifications = false;
+        this.uClassifyPost();
     }
 
-    parseCustomText(text: string, func: any){
-        this.messages = [text];
-        this.uClassify.ucPost("Sentiment", "uClassify", this.messages,this.action)
+    uClassifyPost(){
+        this.uClassify.ucPost(this.classifier, this.username, this.messages,this.action)
             .subscribe(
-                (val: Array<UcReply>) => func(val),
-                (err) => {
-                    this.error = err;
+                (val: any) => {
+                    this.pickAction(val);
+                    this.loadingClassifications = false;
                 }
+                ,(err) => this.error = err
             );
-        this.loadingClassifications = false;
+    }
+
+    pickAction(val){
+        if(this.action === "keywords"){
+            this.parseKeywords(val);
+        } else if (this.action === "classify"){
+            this.parseClassifications(val);
+        }
+    }
+
+    parseCustomText(text: string){
+        this.messages = [text];
+        this.uClassifyPost();
     }
 
     parseKeywords(val: Array<Array<UcKeyword>>){

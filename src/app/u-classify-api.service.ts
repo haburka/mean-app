@@ -13,6 +13,14 @@ export class UClassifyAPIService {
         this.headers.append("content-type", "application/json")
     }
 
+    ucGetInfo(classifier: string, username: string){
+        return this.http.post(
+            "/api/classify-check",
+            JSON.stringify({classifier: classifier, username: username}),
+            {headers: this.headers}
+        ).map((res) => res.json());
+    }
+
     ucPost(classifier: string, username: string, texts: Array<string>, action: string) {
         return this.http.post(
             "/api/classify",
