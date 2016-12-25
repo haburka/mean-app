@@ -14,7 +14,7 @@ export class GetMessagesComponent implements OnInit {
     isLoggedIn: boolean;
     customText: string;
     messages: Array<string>;
-
+    error: string;
 
     constructor(
         private fb: FbGraphService,
@@ -28,6 +28,9 @@ export class GetMessagesComponent implements OnInit {
 
     getFeedPosts(){
         this.fb.fbGetAllPages("/me/posts", "GET", "message",1).then((resp: FeedMessages)=> {
+            if(!resp || !resp.data || resp.data.length === 0){
+                this.error = "We didn't get any data from Facebook. Are you registered as a tester?";
+            }
             this.userData.messages$.next(resp.data
                 .map((val: {message: string}) => val.message)
                 .filter((val) => typeof val !== "undefined"));

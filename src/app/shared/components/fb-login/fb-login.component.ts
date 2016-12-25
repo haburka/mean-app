@@ -10,24 +10,26 @@ export class FbLoginComponent implements OnInit {
 
     loggedIn: boolean;
     error: string;
+    fbError: string;
+    errorString = "I couldn't login to facebook... Sorry." +
+        " You can still classify text that you cut and paste into the app though!";
     constructor(private fb: FbGraphService) {
     }
 
     ngOnInit() {
+        this.fb.fbCheckLogin().then((res: any) => {});
         this.fb.loggedIn$.subscribe((val) => {
-            this.loggedIn = val;
-            this.error = undefined;
+            if(val === false){
+                this.loggedIn = false;
+            } else {
+                this.loggedIn = true;
+                this.error = undefined;
+            }
         });
+        this.fb.error$.subscribe((val)=>this.fbError = val);
     }
 
-
     fbLogin() {
-        this.fb.fbLogin();
-        setTimeout(() => {
-            if(this.fb.loggedIn$.getValue() === false){
-                this.error = "I couldn't login to facebook... Sorry." +
-                    " You can still classify text that you cut and paste into the app though!";
-            }
-        }, 50000);
+        this.fb.fbLogin().then((res: any) => res === false ? this.error = this.errorString: this.error = undefined);
     }
 }

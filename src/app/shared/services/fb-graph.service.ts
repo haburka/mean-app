@@ -16,16 +16,22 @@ export class FbGraphService {
         private http: Http) {
     }
 
-
     fbLogin(){
+        return this.fbCheckApi((resolve) => this.fbRawLogin(resolve));
+    }
+
+    fbRawLogin(resolve: any){
         window['FB'].login((response) => {
             if (response.status === 'connected') {
                 this.token = response.accessToken;
                 this.loggedIn$.next(true);
+                resolve(true);
             } else if (response.status === 'not_authorized') {
                 this.loggedIn$.next(false);
+                resolve(false);
             } else {
                 this.loggedIn$.next(false);
+                resolve(false);
             }
         }, {scope: "user_posts"});
     }

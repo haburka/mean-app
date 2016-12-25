@@ -21,17 +21,20 @@
         <p>If the color is blue, this means your message is {{classes[1]}}. The darker, the more certain. The lighter, the less certain.</p>
         <i *ngFor="let color of blueGrey" [style.color]="color" class="material-icons">indeterminate_check_box</i>
     </div>
-    <md-grid-list cols="3" rowHeight="50px" *ngIf="displayTiles && displayTiles.length > 0 && action === 'classify' && classesFound == true">
+    <md-grid-list cols="3" rowHeight="3.5em" *ngIf="displayTiles.length > 0 && action === 'classify' && classesFound == true">
         <md-grid-tile>Your Text</md-grid-tile>
         <md-grid-tile>{{classifier}}: {{classes[0]}}</md-grid-tile>
         <md-grid-tile>{{classifier}}: {{classes[1]}}</md-grid-tile>
         <md-grid-tile
                 *ngFor="let tile of displayTiles"
                 [style.background]="tile.color">
-            {{tile.text}}
+            <p *ngIf="tile.text.length > maxText" mdTooltip="Tooltip!" mdTooltipPosition="below">
+                {{tile.text | truncate:maxText}}...
+            </p>
+            <p *ngIf="tile.text.length <= maxText">{{tile.text}}</p>
         </md-grid-tile>
     </md-grid-list>
-    <md-grid-list cols="3" rowHeight="3em" *ngIf="displayTiles && displayTiles.length > 0 && action === 'keywords' && classesFound == true">
+    <md-grid-list cols="3" rowHeight="3.5em" *ngIf="displayTiles.length > 0 && action === 'keywords' && classesFound == true">
         <md-grid-tile colspan="2" rowspan="2">Your Text</md-grid-tile>
         <md-grid-tile colspan="1" rowspan="2">Keyword Results</md-grid-tile>
         <md-grid-tile
@@ -40,7 +43,11 @@
                 [colspan] = "tile.colspan"
                 [rowspan] = "tile.rowspan"
                 [style.color] = "tile.textColor">
-            <p>{{tile.text}}</p>
+            <p *ngIf="tile.text.length > maxText">
+                {{tile.text | truncate:maxText}}
+                <span  mdTooltip="Tooltip!" mdTooltipPosition="below"><i class="material-icons">info</i></span>
+            </p>
+            <p *ngIf="tile.text.length <= maxText">{{tile.text}}</p>
         </md-grid-tile>
     </md-grid-list>
     <p *ngIf="error">Error: {{error}}</p>

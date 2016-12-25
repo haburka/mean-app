@@ -1,14 +1,19 @@
 <app-fb-login></app-fb-login>
-<div *ngIf="isLoggedIn">
+<div *ngIf="isLoggedIn === true">
     <button md-raised-button color="primary" (click)="getFeedPosts()">Download your feed posts from Facebook</button>
 </div>
-<div *ngIf="isLoggedIn && !customText && messages.length > 1" class="feed-container">
+<div *ngIf="error">
+    {{error}}
+</div>
+<div *ngIf="isLoggedIn && !customText && messages.length > 1">
     <p>Your facebook feed:</p>
-    <p *ngFor="let message of messages">{{message}}</p>
+    <div class="feed-container">
+        <p *ngFor="let message of messages">{{message}}</p>
+    </div>
 </div>
 <div>
     <p>If you would rather not login through facebook, then you can just paste text into the box below.</p>
     <input md-input placeholder="Put in your own text here:" value="..." [(ngModel)]="customText" (keyup.enter)="setCustomText()">
     <button md-raised-button color="primary" (click)="setCustomText()">Set your custom text.</button>
-    <p *ngIf="userData.messages$.getValue() !== [] && userData.messages$.getValue().length > 1">Your custom text: {{userData.messages$.getValue()}}</p>
+    <p *ngIf="userData.messages$.getValue() !== [] && userData.messages$.getValue().length === 1">Your custom text: {{userData.messages$.getValue()}}</p>
 </div>

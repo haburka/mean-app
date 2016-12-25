@@ -41,8 +41,12 @@ export class FbPlayComponent implements OnInit {
         this.titleService.title.next("Analyze your Facebook Posts");
     }
 
+    fbLogin(){
+        this.fb.fbLogin().then((res: any) => {});
+    }
+
     fbCheckLogin(){
-        this.fb.fbCheckLogin().then((res: any) => this.isLoggedIn = res);
+        this.fb.fbCheckLogin().then((res: any) => {});
     }
 
     parseResponse(val){

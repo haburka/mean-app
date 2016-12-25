@@ -20,6 +20,7 @@ import {ThemeService} from "./shared/services/theme.service";
 import {TitleService} from "./shared/services/title-service.service";
 import {GetMessagesComponent} from "./shared/components/get-messages/get-messages.component";
 import {FbLoginComponent} from "./shared/components/fb-login/fb-login.component";
+import {TruncatePipe} from "./shared/pipes/truncate.pipe";
 
 const ROUTES = [
     {
@@ -58,6 +59,7 @@ const ROUTES = [
         ClassifierComponent,
         GetMessagesComponent,
         FbLoginComponent,
+        TruncatePipe,
     ],
     imports: [
         BrowserModule,

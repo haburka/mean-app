@@ -25,6 +25,7 @@ export class ClassifierComponent implements OnInit {
     public action: string;
     public pink: Array<string>;
     public blueGrey: Array<string>;
+    public maxText: number = 20;
 
     constructor(private uClassify: UClassifyAPIService,
                 private theme: ThemeService,
@@ -32,6 +33,7 @@ export class ClassifierComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.maxText = window.innerWidth / 12;
         this.pink = (<any>Object).values(this.theme.pink);
         this.blueGrey = (<any>Object).values(this.theme.blueGrey);
         this.userData.messages$.subscribe((val) => this.messages = val);
@@ -133,6 +135,7 @@ export class ClassifierComponent implements OnInit {
         let classification = val[0].classification;
         this.classes[0] = classification[0].className;
         this.classes[1] = classification[1].className;
+        this.classesFound = true;
     }
 
     private setClassesFromKeywords(val: Array<Array<UcKeyword>>) {

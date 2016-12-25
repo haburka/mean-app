@@ -16,7 +16,6 @@ export class CustomClassificationComponent implements OnInit {
     public classifier: string;
     public error: string;
     public classifierInfo: Array<Tile> = [];
-    public readyToParse: boolean = false;
 
     constructor(
       private uClassify: UClassifyAPIService,
