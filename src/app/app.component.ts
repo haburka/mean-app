@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {Router} from "@angular/router";
 import {TitleService} from "./shared/services/title-service.service";
+import {ErrorService} from "./error.service";
 
 @Component({
     selector: 'app-root',
@@ -12,7 +13,8 @@ export class AppComponent {
     sidenavActive = "none";
 
     constructor(private titleService: TitleService,
-                private router: Router) {
+                private router: Router,
+                private error: ErrorService) {
 
     }
 

@@ -1,3 +1,8 @@
+<div class="error" *ngIf="error.error.getValue() === true">
+    <p>
+        There's been an error. You'll have to refresh if you want to do anything :(
+    </p>
+</div>
 <md-toolbar>
     <span>
       <md-sidenav #sidenav class="sidenav" [style.display]="sidenavActive">

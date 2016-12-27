@@ -88,6 +88,11 @@ router.post('/classify', upload.array(), (req, userRes) => {
         }
     );
 });
+router.post('/error', upload.array(), (req, userRes) => {
+    console.log(req.body.error, req.body.stack);
+    userRes.json(true);
+    userRes.end();
+});
 module.exports = router;
 
 /*

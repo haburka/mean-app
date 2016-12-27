@@ -1,7 +1,7 @@
 import {BrowserModule} from "@angular/platform-browser";
-import {NgModule} from "@angular/core";
+import {NgModule, ErrorHandler} from "@angular/core";
 import {FormsModule} from "@angular/forms";
-import {HttpModule} from "@angular/http";
+import {HttpModule, Http} from "@angular/http";
 import {AppComponent} from "./app.component";
 import {RouterModule} from "@angular/router";
 import {FbPlayComponent} from "./fb-play/fb-play.component";
@@ -21,6 +21,8 @@ import {TitleService} from "./shared/services/title-service.service";
 import {GetMessagesComponent} from "./shared/components/get-messages/get-messages.component";
 import {FbLoginComponent} from "./shared/components/fb-login/fb-login.component";
 import {TruncatePipe} from "./shared/pipes/truncate.pipe";
+import {CustomErrorModule} from "./shared/overrides/custom-error-handler";
+import {ErrorService} from "./error.service";
 
 const ROUTES = [
     {
@@ -66,14 +68,16 @@ const ROUTES = [
         FormsModule,
         HttpModule,
         RouterModule.forRoot(ROUTES), // Add routes to the app
-        MaterialModule.forRoot()
+        MaterialModule.forRoot(),
+        CustomErrorModule
     ],
     providers: [
         FbGraphService,
         UClassifyAPIService,
         TitleService,
         ThemeService,
-        UserDataService
+        UserDataService,
+        ErrorService
     ],
     bootstrap: [AppComponent],
 })

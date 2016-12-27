@@ -41,13 +41,17 @@ export class ClassifierComponent implements OnInit {
 
     getClassifications() {
         this.loadingClassifications = true;
-        this.uClassifyPost();
+        // this.uClassifyPost();
+        this.messages = this.uClassify.exampleMessages();
+        this.parseKeywords(this.uClassify.exampleKeyword());
     }
+
 
     uClassifyPost() {
         this.uClassify.ucPost(this.classifier, this.username, this.messages, this.action)
             .subscribe(
                 (val: any) => {
+                    //do error handling here :)
                     this.pickAction(val);
                     this.loadingClassifications = false;
                 }
