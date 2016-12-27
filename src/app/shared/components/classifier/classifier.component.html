@@ -1,5 +1,5 @@
 <div class="container">
-    <div *ngIf="readyToParse && !loadingClassifications">
+    <div *ngIf="readyToParse && userData.messages$.getValue().length !== 0 && !loadingClassifications">
         <p>Select a style of classification.</p>
         <md-radio-group [(ngModel)]="action">
             <md-radio-button value="classify">Overall {{classifier}}</md-radio-button>
