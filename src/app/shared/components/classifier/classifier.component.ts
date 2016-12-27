@@ -34,8 +34,8 @@ export class ClassifierComponent implements OnInit {
 
     ngOnInit() {
         this.maxText = window.innerWidth / 12;
-        this.pink = (<any>Object).values(this.theme.pink);
-        this.blueGrey = (<any>Object).values(this.theme.blueGrey);
+        this.pink = Object.keys(this.theme.pink).map((key) => this.theme.pink[key]);
+        this.pink = Object.keys(this.theme.blueGrey).map((key) => this.theme.blueGrey[key]);
         this.userData.messages$.subscribe((val) => this.messages = val);
     }
 
