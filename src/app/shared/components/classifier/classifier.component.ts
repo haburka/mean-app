@@ -41,9 +41,9 @@ export class ClassifierComponent implements OnInit {
 
     getClassifications() {
         this.loadingClassifications = true;
-        // this.uClassifyPost();
-        this.messages = this.uClassify.exampleMessages();
-        this.parseKeywords(this.uClassify.exampleKeyword());
+        this.uClassifyPost();
+        // this.messages = this.uClassify.exampleMessages();
+        // this.parseKeywords(this.uClassify.exampleKeyword());
     }
 
 

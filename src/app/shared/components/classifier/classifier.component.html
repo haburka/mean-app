@@ -1,5 +1,5 @@
 <div class="container">
-    <div *ngIf="readyToParse && !loadingClassifications">
+    <div *ngIf="readyToParse && userData.messages$.getValue().length !== 0 && !loadingClassifications">
         <p>Select a style of classification.</p>
         <md-radio-group [(ngModel)]="action">
             <md-radio-button value="classify">Overall {{classifier}}</md-radio-button>
@@ -31,7 +31,6 @@
             <p>
                 {{tile.text}}
             </p>
-            <p *ngIf="tile.text.length <= maxText">{{tile.text}}</p>
         </md-grid-tile>
     </md-grid-list>
     <md-grid-list cols="3" rowHeight="3.5em" *ngIf="displayTiles.length > 0 && action === 'keywords' && classesFound == true">
